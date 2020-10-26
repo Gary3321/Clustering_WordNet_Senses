@@ -99,5 +99,19 @@ print('df_features',len(df_features))
 
 #since NaN, there are still duplicated rows in df_features. drop duplicates after replacing
 #Nan with other values
-df_features.to_csv('feature_space.csv')
+
+
+#update verb group using results from perl
+#use perl to get the following features: antonyms, deriv, pertainyms, verbgroups
+file_path='/Users/gary/Documents/2020Fall/IntroNLP/project/note_pairs_wncourpus_similarity.csv'
+df_perl=pd.read_csv(file_path)
+
+df_perl_vg=df_perl[df_perl[' vgrp1']==df_perl[' vgrp2']]
+for i in range(len(df_perl_vg)):
+    sense1=df_perl_vg.loc[df_perl_vg.index[i],'sense1']
+    sense2=df_perl_vg.loc[df_perl_vg.index[i],' sense2']
+    df_features.loc[((df_features['Sense1']==sense1)&(df_features['Sense2']==sense2)),'verbgroup']=1
+
+
+df_features.to_csv('feature_space.csv',index=False)
 
